@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
-use App\Models\CategoryBerita;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CategoryBerita;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class BeritaController extends Controller
 {
@@ -60,7 +61,22 @@ class BeritaController extends Controller
         $berita->save();
 
         // Redirect back with success message
-        return redirect()->back()->with('success', 'Berita berhasil ditambahkan.');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil ditambahkan.');
+    }
+
+    public function upload(Request $request)
+    {
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+
+            // Simpan file ke dalam penyimpanan
+            $path = $file->store('public/uploads');
+
+            // Dapatkan URL gambar dari penyimpanan
+            $url = Storage::url($path);
+
+            return response()->json(['url' => $url]);
+        }
     }
 
     public function show($id_or_slug)
@@ -113,7 +129,7 @@ class BeritaController extends Controller
         }
         $berita->save();
 
-        return redirect()->back()->with('success', 'Berita berhasil diperbarui.');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil diperbarui.');
     }
 
     public function delete($id)
@@ -122,6 +138,12 @@ class BeritaController extends Controller
         Storage::delete($berita->photo);
         $berita->delete();
 
-        return redirect()->back()->with('success', 'Berita berhasil dihapus.');
+        return redirect()->route('berita.index')->with('success', 'Berita berhasil dihapus.');
+    }
+
+    public function checkSlug(Request $request)
+    {
+        $slug = SlugService::createSlug(Berita::class, 'slug', $request->title);
+        return response()->json(['slug' => $slug]);
     }
 }

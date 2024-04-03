@@ -22,6 +22,8 @@ Route::prefix('berita')->group(function () {
     Route::get('/view', [BeritaController::class, 'index'])->name('berita.index');
     Route::get('/create', [BeritaController::class, 'create'])->name('berita.create');
     Route::post('/store', [BeritaController::class, 'store'])->name('berita.store');
+    Route::get('/create/checkSlug', [BeritaController::class, 'checkSlug'])->name('check-slug');
+    Route::post('/upload', [BeritaController::class, 'upload'])->name('upload');
     Route::get('/show/{id_or_slug}', [BeritaController::class, 'show'])->name('berita.show');
     Route::get('/edit/{id}', [BeritaController::class, 'edit'])->name('berita.edit');
     Route::put('/update/{id}', [BeritaController::class, 'update'])->name('berita.update');

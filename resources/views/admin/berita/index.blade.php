@@ -41,7 +41,7 @@
         <th scope="col">Gambar</th>
         <th scope="col">Judul</th>
         <th scope="col">Slug</th>
-        <th scope="col">Isi</th>
+        {{-- <th scope="col">Isi</th> --}}
         <th scope="col">Aksi</th>
       </tr>
     </thead>
@@ -54,11 +54,11 @@
         <td><img src="{{ asset('storage/' . $br->photo) }}" alt="Gambar Berita" width="100px"></td>
         <td>{{ $br->title }}</td>
         <td>{{ $br->slug }}</td>
-        <td>{{ $br->body }}</td>
+        {{-- <td>{!! $br->body !!}</td> --}}
         <td>
           <a href="{{ route('berita.show', $br->id) }}" class="btn btn-info btn-sm">Detail</a>
           <a href="{{ route('berita.edit', $br->id) }}" type="button" class="btn btn-primary btn-sm">Edit</a>
-          <form action="{{ route('berita.delete', $br->id) }}" method="POST" style="display: inline;">
+          <form action="{{ route('berita.delete', $br->id) }}" method="GET" style="display: inline;">
             @csrf
             @method('DELETE')
             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">Hapus</button>
